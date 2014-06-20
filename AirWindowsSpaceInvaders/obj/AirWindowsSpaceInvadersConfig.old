@@ -31,15 +31,15 @@
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
-      <path-element>E:\DropboxGlantucanGmail\Dropbox\_OTRO\Clases\UD-5 Proyectos\spaceInvaders\AirWindowsSpaceInvaders\src</path-element>
+      <path-element>E:\programming\curro\SpaceInvaders\AirWindowsSpaceInvaders\src</path-element>
       <path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
     <library-path append="true">
-      <path-element>E:\DropboxGlantucanGmail\Dropbox\_OTRO\Clases\UD-5 Proyectos\spaceInvaders\AirWindowsSpaceInvaders\lib\spaceInvadersSkinLib.swc</path-element>
+      <path-element>E:\programming\curro\SpaceInvaders\AirWindowsSpaceInvaders\lib\spaceInvadersSkinLib.swc</path-element>
     </library-path>
   </compiler>
   <file-specs>
-    <path-element>E:\DropboxGlantucanGmail\Dropbox\_OTRO\Clases\UD-5 Proyectos\spaceInvaders\AirWindowsSpaceInvaders\src\Main.as</path-element>
+    <path-element>E:\programming\curro\SpaceInvaders\AirWindowsSpaceInvaders\src\Main.as</path-element>
   </file-specs>
   <default-background-color>#222222</default-background-color>
   <default-frame-rate>60</default-frame-rate>

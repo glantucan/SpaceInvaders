@@ -14,82 +14,75 @@ package game
 		public function CollisionChecker() 
 		{
 			super();
-			
 		}
 		
 		override public function update(frame:int):void
 		{
+			// Comprobamos si hay colisiones entre los proyectiles enemigos y nuestra nave
 			var enemyProjCount:int = enemyProjectiles.length;
-			
-			
-			var disposableHProjCount:int;
-			var disposableEShipsCount:int;
-			
-			// Check for hero impacts 
 			var heroCollider:Rectangle = _heroShip.getCollider();
 			var curProjectile:AProjectile;
-			
 			for (var i:int = 0; i < enemyProjCount; i++) 
 			{
 				curProjectile = enemyProjectiles[i];
+				// Si hay colisión (lo comprobamos con la intersección de los dos rectángulos)...
 				if ( heroCollider.intersects( curProjectile.getCollider() ) )
 				{
+					// El proyectil le hace pupa a nuestra nave.
 					_heroShip.takeDamage(curProjectile);
 				}
 			}
 			
+			// Comprobamos si hay colisiones entre nuestros proyectiles y cada nave enemiga
+			var enemyShipsCount:int = enemyShips.length;
 			var curEnemy:AShip;
 			var curEnemyCollider:Rectangle;
-			
-			var enemyShipsCount:int = enemyShips.length;
+			// Para cada nave enemiga...
 			for (var j:int = 0; j < enemyShipsCount; j++) 
 			{
-				curEnemy = enemyShips[j];
-				curEnemyCollider = curEnemy.getCollider();
-				
-				
 				var heroProjCount:int = heroProjectiles.length;
+				curEnemy = enemyShips[j];
+				curEnemyCollider = curEnemy.getCollider();	
+				// ... y para cada uno de nuestros proyectiles...
 				for (var k:int = 0; k < heroProjCount; k++) 
 				{
 					curProjectile = heroProjectiles[k];
-					
+					// ... si esta nave no ha sido destruida ya por otro proyectil 
+					// (no es estrictamente neesario hacer esta comprobación 
+					// pero nos ahorra unas cuantas operaciones en algunas ocasiones)
 					if (!curEnemy.destroyed)
 					{
+						// ...y hay colision entre el enemigo y el proyectil que estamos comprobando...
 						if (curEnemyCollider.intersects( curProjectile.getCollider() ) )
 						{
-							trace("Frame " + frame + ":" + curProjectile.id + " inpact on " + curEnemy.id);
-							trace("Projectile collider: " + curProjectile.getCollider());
-							trace("Projectile collider: " + curEnemyCollider);
-							//trace();
-							
-							
+							// ... el proyectil le hace pupa al enemigo...
 							curEnemy.takeDamage(curProjectile);
-							// Check if curEnemy has't been destroyed by another projectile
+							// ... si despuñes de hacerle pupa el enemigo ha sido destruido...
 							if (curEnemy.destroyed)
 							{
-								// Ship is destroyed. We need to avaoid checking the same ship again
+								// ... quitamos al enemigo de la lista, ya no necesitamos comprobarlo más.
 								removeEnemyShip(curEnemy);
+								// Recuerda que este método no elimina el enemigo de la lista inmediatamente
+								// para no modificar la lista mientras la está recorriendo el bucle. 
 							}
-							
+							// ... y el proyectil se destruye
 							curProjectile.hit();
-							// Projectile is destroyed. We need to avaoid checking the same projectile again
-							// So we add it to the list of to be disposed projectiles 
+							//... por tanto tenemos que añadirlo a la lista de nuestros proyectiles a eliminar
 							removeHeroProjectile(curProjectile);
 						}
 					}
 				}
 				
-				// Finished checking the hero projectiles list. Dispose destroyed ones:
+				// Si hay proyectiles a eliminar, ahora es el momento, antes de realizar otra pasada sobre la 
+				// lista de proyectiles para ver si chocan con el siguiente enemigo.
 				if (disposableHProj.length > 0)
 				{
-					trace("Collision disposable projectiles: " + disposableHProj.length, disposableHProj.join(","));
 					disposeDestroyedObjects(heroProjectiles, disposableHProj);
-					trace("Collision disposable projectiles after cleaning: " + disposableHProj.length, disposableHProj.join(","));
-					trace("Collision projectiles left: " + heroProjectiles.length, heroProjectiles.join(","));
 				}
 			}
 			
-			// Finished checking the enemy ships list. Dispose destroyed ones:
+			// Hemos terminado de comprobar los choques de todos los proyectiles con todos los enemigos. 
+			// Es el momento de eliminar todos los que han sido marcados como destruidos.
 			disposeDestroyedObjects(enemyShips, disposableEShips);
 		}
 	}

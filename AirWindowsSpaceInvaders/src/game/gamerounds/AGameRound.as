@@ -107,7 +107,6 @@ package game.gamerounds
 			collisionChecker.disposeAllDestroyed();
 			
 			collisionChecker.update(frameCount);
-
 			if (updater.checkRoundEnd())
 			{
 				endRound();

@@ -21,14 +21,10 @@ package game
 		override public function update(frame:int):void 
 		{
 			
-			debugSprite.graphics.clear();
-			
-			var curProjectile:AProjectile;
-			var curEnemy:AShip;
-			
 			_heroShip.update();
 			
 			var enemyProjCount:int = enemyProjectiles.length;
+			var curEnemy:AShip;
 			for (var i:int = 0; i < enemyProjCount; i++) 
 			{
 				curProjectile = enemyProjectiles[i];
@@ -36,19 +32,13 @@ package game
 			}
 			
 			var enemyShipsCount:int = enemyShips.length;
+			var curProjectile:AProjectile;
 			for (var j:int = 0; j < enemyShipsCount; j++) 
 			{
 				curEnemy = enemyShips[j];
 				if (!curEnemy.disposed) 
 				{
 					curEnemy.update();
-					
-					/*if (curEnemy.getSkin())
-					{
-						var rect:Rectangle = curEnemy.getCollider();
-						debugSprite.graphics.lineStyle(1, 0x000000 );
-						debugSprite.graphics.drawRect(rect.x, rect.y, rect.width, rect.height);
-					}*/
 				}
 			}
 			
@@ -57,28 +47,9 @@ package game
 			{
 				curProjectile = heroProjectiles[k];
 				curProjectile.update();
-				
-				/*if (curProjectile.skin)
-				{
-					rect = curProjectile.getCollider();
-					if (rect)
-					{
-						debugSprite.graphics.lineStyle(1, 0x000000 );
-						debugSprite.graphics.drawRect(rect.x, rect.y, rect.width, rect.height);
-					}
-				}*/
 			}
-			
-			
 		}
 		
-		
-		override public function removeHeroProjectile(projectile:AProjectile):void 
-		{
-			trace("projectile " + projectile.id + " ------->> Removed from game updater")
-			trace();
-			super.removeHeroProjectile(projectile);
-		}
 		public function checkRoundEnd():Boolean
 		{
 			if (enemyProjectiles.length == 0 && enemyShips.length == 0)
