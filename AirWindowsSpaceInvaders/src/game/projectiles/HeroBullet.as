@@ -1,7 +1,7 @@
-package game.projectiles {
-	import flash.display.DisplayObjectContainer;
+package game.projectiles 
+{
 	import flash.display.MovieClip;
-	import game.gamerounds.AGameRound;
+	import game.UpdatableList;
 	/**
 	 * ...
 	 * @author Glantucan
@@ -10,18 +10,20 @@ package game.projectiles {
 	{
 		
 		
-		public function HeroBullet(theContainer:DisplayObjectContainer, theGameRound:AGameRound, projId:String) 
+		public function HeroBullet(	theContainer:MovieClip, projId:String, 
+									updatables:UpdatableList, projectiles:ProjectileList) 
 		{
-			super(theContainer, theGameRound, projId);
-			skin = container.addChild(new HeroBulletSkin()) as MovieClip;
+			super(theContainer, projId,	updatables,	projectiles);
+			skin = new HeroBulletSkin();
+			container.addChild(skin);
 			
-			damage_mc = skin.damage_mc;
-			skin.removeChild(skin.damage_mc);
+			damage_mc = skin.animation_mc.damage_mc;
+			skin.animation_mc.removeChild(damage_mc);
 			
-			collider = skin.getBounds(container.stage);
+			_collider = skin.getBounds(container.stage);
 			aY = -1;
 			vMax = 10;
-			damage = 1;
+			damage = 2;
 		}
 		
 		

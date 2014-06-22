@@ -2,11 +2,8 @@
 {
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
-	import game.CollisionChecker;
 	import game.gamerounds.AGameRound;
 	import game.gamerounds.GameRound_1;
-	import game.AUpdater;
-	import game.GameUpdater;
 	
 	/**
 	 * ...
@@ -24,7 +21,7 @@
 			var debugSprite:Sprite = new Sprite();
 			battleField.addChild(debugSprite);
 			
-			var round:AGameRound = new GameRound_1(battleField, new GameUpdater(debugSprite), new CollisionChecker());
+			var round:AGameRound = new GameRound_1(battleField);
 			round.buildRound();
 			round.startRound();
 		}

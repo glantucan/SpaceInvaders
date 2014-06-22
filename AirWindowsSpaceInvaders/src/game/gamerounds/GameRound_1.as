@@ -1,17 +1,10 @@
 package game.gamerounds 
 {
-	import com.greensock.data.TweenLiteVars;
-	import com.greensock.TimelineLite;
 	import com.greensock.TweenLite;
 	import flash.display.MovieClip;
-	import flash.events.Event;
-	import flash.text.ReturnKeyLabel;
-	import game.AUpdater;
-	import game.ships.AShip;
 	import game.ships.EnemyShip;
 	import game.ships.EnemyVanguard;
 	import game.ships.HeroShip;
-	import game.AUpdater;
 	/**
 	 * ...
 	 * @author Glantucan
@@ -20,9 +13,10 @@ package game.gamerounds
 	{
 		
 		
-		public function GameRound_1(battleField:MovieClip, updater:AUpdater, collisionChecker:AUpdater) 
+		
+		public function GameRound_1(battleField:MovieClip) 
 		{
-			super(battleField, updater, collisionChecker);
+			super(battleField);
 			
 			enemyCols = 8;
 			enemyRows = 4;
@@ -34,10 +28,9 @@ package game.gamerounds
 		
 		override protected function createAndConfigureShips():void 
 		{
-			var hero:HeroShip = new HeroShip(battleField, this);
-			hero.place( battleWidth / 2, battleField.reference_mc.height - hero.getCollider().height / 2 );
-			updater.heroShip = hero;
-			collisionChecker.heroShip = hero;
+			// Crear al heroe ;)
+			hero = new HeroShip(battleField, "Hero", updatableObjects, heroProjectiles, alienProjectiles);
+			hero.place( battleWidth / 2, battleField.reference_mc.height - hero.height / 2 );
 			
 			var enemySkins:Array = []; 
 			var curEnemy:EnemyShip;
@@ -49,11 +42,7 @@ package game.gamerounds
 			{
 				for (var k:int = 0; k < enemyRows; k++) 
 				{
-					curEnemy = new EnemyVanguard(battleField, this);
-					curEnemy.id = "vanguard_" + i + "_" + k;
-					updater.addEnemyShip(curEnemy);
-					collisionChecker.addEnemyShip(curEnemy);
-					
+					curEnemy = new EnemyVanguard(battleField, "vanguard_" + i + "_" + k, updatableObjects, alienProjectiles, heroProjectiles);
 					xPos = formationMargin + i * formationWidth / (enemyCols - 1) ;
 					yPos = 100 + k * 50;
 					curEnemy.place(xPos, yPos);
@@ -79,11 +68,6 @@ package game.gamerounds
 				timeline.add(TweenLite.to ( enemySkins, 1, { y:"+=" + totalVDrift.toString() } ) );
 				
 			}
-			
 		}
-		
-		
-		
 	}
-
 }

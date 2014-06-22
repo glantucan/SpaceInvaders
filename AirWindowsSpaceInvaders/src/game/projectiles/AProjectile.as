@@ -1,38 +1,31 @@
-package game.projectiles {
-	import flash.display.DisplayObjectContainer;
+package game.projectiles 
+{
 	import flash.display.MovieClip;
-	import flash.events.Event;
-	import flash.geom.Rectangle;
-	import game.gamerounds.AGameRound;
+	import game.colliders.ACollider;
+	import game.UpdatableList;
 	/**
 	 * ...
 	 * @author Glantucan
 	 */
-	public class AProjectile 
+	public class AProjectile extends ACollider
 	{
-		protected var gameRound:AGameRound;
-		protected var container:MovieClip;
+		protected var projectiles:ProjectileList;
 		protected var damage_mc:MovieClip;
-		
-		public var skin:MovieClip;
-		protected var collider:Rectangle;
-		public var damage:int;
 		
 		protected var vX:Number;
 		protected var vY:Number;
 		protected var aX:Number;
 		protected var aY:Number;
 		protected var vMax:Number;
-		public var destroyed:Boolean;
 		
-		public var id:String;
+		public var damage:int;
 		
 		
-		public function AProjectile(theContainer:MovieClip, theGameRound:AGameRound,projId:String) 
+		public function AProjectile(	theContainer:MovieClip, projId:String, 
+										updatables:UpdatableList, projectiles:ProjectileList) 
 		{
-			gameRound = theGameRound;
-			id = projId;
-			container = theContainer;
+			super(theContainer, projId, updatables);
+			this.projectiles = projectiles;
 			vX = 0;
 			vY = 0;
 			aX = 0;
@@ -40,93 +33,63 @@ package game.projectiles {
 			vMax = 0;
 		}
 		
-		public function place(x:Number, y:Number):void
-		{
-			collider.x = x - skin.width / 2;
-			collider.y = y - skin.height;
-			skin.x = x;
-			skin.y = y;
-		}
-		
-		public function getCollider():Rectangle
-		{
-			if (!destroyed)
-			{
-				if (!collider)
-				{
-					collider = skin.getBounds(container.reference_mc);
-				}
-				else 
-				{
-					collider.x = skin.x - skin.width / 2;
-					collider.y = skin.y - skin.height;
-				}
-			}
-			return collider;
-		}
-		
-	
-		
-		//Abstract
+		//Template
 		public function hit():void
 		{
+			trace("Projectile " + id +" hit, removing from projectile list");
+			onHit();
 			destroyed = true;
-			collider = null;
-			skin.gotoAndPlay("hit");
-			trace("projectile" + id + " hit. Exploding!");
+			_collider = null;
+			skin.animation_mc.gotoAndPlay("destroy");
+			projectiles.remove(this);
 		}
 		
-		public function update():void 
+		//Abstract
+		protected function onHit():void
 		{
-			if (!destroyed)
+			
+		}
+		
+		override protected function onUpdate():void 
+		{
+			
+			if (aX != 0 || aY != 0)
 			{
-				if (aX != 0 || aY != 0)
+				if (vX * vX + vY * vY < vMax * vMax)
 				{
-					if (vX * vX + vY * vY < vMax * vMax)
-					{
-						vX += aX;
-						vY += aY;
-						skin.x += vX;
-						skin.y += vY;
-					} 
-					else
-					{
-						aX = 0;
-						aY = 0;
-					}
-				}
-				else
-				{
+					vX += aX;
+					vY += aY;
 					skin.x += vX;
 					skin.y += vY;
+				} 
+				else
+				{
+					aX = 0;
+					aY = 0;
 				}
-				collider.x = skin.x - skin.width/2;
-				collider.y = skin.y - skin.height;
 			}
 			else
 			{
-				if (skin.currentLabel == "destroyed")
-				{
-					trace("projectile " + id + " finished exploding");
-					dispose();
-					gameRound.removeHeroProjectile(this);
-				}
+				skin.x += vX;
+				skin.y += vY;
 			}
+			
+			
 			if (isOutOfScreen())
 			{
-				trace("Projectile " + id + " is Out of Screen");
-				gameRound.removeHeroProjectile(this,true);
-				dispose();
+				trace("Projectile "+ id +" is out of screen, removing from lists")
+				projectiles.remove(this);
+				projectiles.clean();
+ 				updatableList.remove(this);
 			}
 			
 		}
 		
 		public function isOutOfScreen():Boolean 
 		{
-			//trace(collider + "-------------" + container.reference_mc.getBounds(container.stage) )
 			if (!destroyed)
 			{
-				if (collider.intersects( container.reference_mc.getBounds(container.stage) ) )
+				if (_collider.intersects( reference.getBounds(reference) ) )
 				{
 					return false;
 				} 
@@ -142,21 +105,24 @@ package game.projectiles {
 		}
 		
 		
-		public function dispose():void
-		{
-			trace("projectile " + id + " destroyed");
-			trace();
-			skin.parent.removeChild(skin);
-			skin = null;
-			collider = null;
-			container = null;
-		}
 		
 		public function getDamageMC():MovieClip 
 		{
 			return damage_mc;
 		}
 		
+		
+		override protected function onDisposal():void
+		{
+			destroyed = true;
+			trace("Projectile " + id +" is disposed now");
+			projectiles = null;
+		}
 	}
 
 }
+
+
+
+
+
