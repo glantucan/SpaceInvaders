@@ -78,7 +78,7 @@ package game
 			// de proyectiles.
 			for (var i:int = 0; i < toRemoveCount ; i++) 
 			{
-				if(disposables[i] is AProjectile) trace("Projectile " + disposables[i].id + " cleaned form updatables list")
+				//if(disposables[i] is AProjectile) trace("Projectile " + disposables[i].id + " cleaned form updatables list")
 				updatables.splice( updatables.indexOf( disposables[i] ), 1 );
 				disposables[i].dispose();
 			}

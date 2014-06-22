@@ -89,8 +89,8 @@ package game.projectiles {
 			// de proyectiles.
 			for (var i:int = 0; i < toRemoveCount ; i++) 
 			{
-				trace("Projectile " + disposables[i].id + " cleaned form projectile list");
-				trace(toRemoveCount,disposables[i],projectiles.indexOf( disposables[i]));
+				//trace("Projectile " + disposables[i].id + " cleaned form projectile list");
+				//trace(toRemoveCount,disposables[i],projectiles.indexOf( disposables[i]));
 				projectiles.splice( projectiles.indexOf( disposables[i] ), 1 );
 			}
 			

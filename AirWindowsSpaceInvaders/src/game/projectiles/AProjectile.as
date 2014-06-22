@@ -36,7 +36,7 @@ package game.projectiles
 		//Template
 		public function hit():void
 		{
-			trace("Projectile " + id +" hit, removing from projectile list");
+			//trace("Projectile " + id +" hit, removing from projectile list");
 			onHit();
 			destroyed = true;
 			_collider = null;
@@ -77,7 +77,7 @@ package game.projectiles
 			
 			if (isOutOfScreen())
 			{
-				trace("Projectile "+ id +" is out of screen, removing from lists")
+				//trace("Projectile "+ id +" is out of screen, removing from lists")
 				projectiles.remove(this);
 				projectiles.clean();
  				updatableList.remove(this);
@@ -115,7 +115,7 @@ package game.projectiles
 		override protected function onDisposal():void
 		{
 			destroyed = true;
-			trace("Projectile " + id +" is disposed now");
+			//trace("Projectile " + id +" is disposed now");
 			projectiles = null;
 		}
 	}

@@ -98,7 +98,7 @@ package game.colliders
 			}
 			else if (skin.animation_mc.currentLabel == "destroyed")
 			{
-				if (this is AProjectile) trace("Projectile " + id +" is destroyed, removing from updatables");
+				//if (this is AProjectile) trace("Projectile " + id +" is destroyed, removing from updatables");
 				
 				updatableList.remove(this);
 			}
