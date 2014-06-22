@@ -4,62 +4,49 @@ package game.ships {
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.geom.Rectangle;
+	import game.colliders.ACollider;
 	import game.gamerounds.AGameRound;
 	import game.projectiles.AProjectile;
+	import game.projectiles.ProjectileList;
 	import game.shields.AShield;
+	import game.UpdatableList;
 	/**
 	 * ...
 	 * @author Glantucan
 	 */
-	public class AShip 
+	public class AShip extends ACollider
 	{
-		protected var gameRound:AGameRound;
-		
-		protected var container:MovieClip;
-		protected var skin:MovieClip;
-		protected var collider:Rectangle;
+		// Lista de proyectiles que me hace pupa
+		protected var eProjectiles:ProjectileList;
 		
 		protected var shield:AShield;
 		protected var weaponsArray:Array;
 		
-		public var id:String;
 		protected var life:int;
 		
-		public var destroyed:Boolean;
 		public var disposed:Boolean;
 		//protected var weapons:WeaponsArray;
 		
 		
-		public function AShip(theContainer:MovieClip, theGameRound:AGameRound) 
+		public function AShip( 	theContainer:MovieClip, shipId:String, updatables:UpdatableList,
+								friendProjectiles:ProjectileList, enemyProjectiles:ProjectileList) 
 		{
-			gameRound = theGameRound;
-			container = theContainer;
-			collider = skin.getBounds(container.reference_mc);
+			super(theContainer, shipId, updatables);
+			eProjectiles = enemyProjectiles;
+			fProjectiles = friendProjectiles;
 		}
 		
-		
-		public function place(x:Number, y:Number):void
-		{
-			skin.x = x;
-			skin.y = y;
-		}
 		
 		//Abstract update function
-		public function update():void  
+		override protected final function onUpdate():void  
 		{
-			if (destroyed && skin.ship_mc.currentLabel == "dead")
-			{
-				dispose();
-			}
+			beforeCollision();
+			eProjectiles.collisionCheck(this);
+			afterCollision();
 		}
 		
-		public function getCollider():Rectangle
-		{
-			collider.x = skin.x - skin.width / 2;;
-			collider.y = skin.y - skin.height / 2;;
-			
-			return collider;
-		}
+		protected function beforeCollision():void {}
+		protected function afterCollision():void {}
 		
 		public function getSkin():DisplayObject
 		{
@@ -68,7 +55,6 @@ package game.ships {
 		
 		public function takeDamage(projectile:AProjectile):void
 		{
-			
 			if (shield)
 			{
 				shield.takeDamage(projectile);
@@ -76,13 +62,10 @@ package game.ships {
 			else
 			{	
 				life -= projectile.damage;
-				trace(this.id + " taking damage. -> Life left: "+ life);
-				TweenLite.to(this.skin.ship_mc, 0.01, { y:"-=10" } );
-				TweenLite.to(this.skin.ship_mc, 0.5, { y:"+=10", delay:0.01 } );
 				
 				if (life <= 0)
 				{
-					skin.ship_mc.gotoAndPlay("die");
+					skin.animation_mc.gotoAndPlay("destroy");
 					destroyed = true;
 				}
 				else
@@ -96,13 +79,12 @@ package game.ships {
 		protected function showDamage(projectile:AProjectile):void { }
 		
 		
-		
 		public function shieldDestroyed():void
 		{
 			shield = null;
 		}
 		
-		public function dispose():void
+		override protected function onDisposal():void
 		{
 			disposed = true;
 			if (shield) shield.destroy();
@@ -116,9 +98,8 @@ package game.ships {
 				}
 			}
 			weaponsArray = null;
-			skin.parent.removeChild(skin);
-			skin = null;
-			gameRound = null;
+			fProjectiles = null;
+			eProjectiles = null;
 		}
 		
 	}

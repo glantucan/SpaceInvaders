@@ -1,12 +1,10 @@
-
 package game.ships 
 {
-	import com.greensock.TimelineLite;
 	import com.greensock.TweenLite;
 	import flash.display.MovieClip;
-	import flash.geom.Point;
-	import game.gamerounds.AGameRound;
 	import game.projectiles.AProjectile;
+	import game.projectiles.ProjectileList;
+	import game.UpdatableList;
 	/**
 	 * ...
 	 * @author Glantucan
@@ -17,25 +15,29 @@ package game.ships
 		protected var firingRate:Number;
 		protected var firingMode:String;
 		
-		public function EnemyShip(theContainer:MovieClip, gameRound:AGameRound) 
+		public function EnemyShip(	theContainer:MovieClip, shipId:String, updatables:UpdatableList, 
+									friendProjectiles:ProjectileList, enemyProjectiles:ProjectileList) 
 		{
-			super(theContainer, gameRound);
+			super(theContainer, shipId, updatables, friendProjectiles, enemyProjectiles);
 			
-		}
+		} 
 		
-	
 		override protected function showDamage(projectile:AProjectile):void 
 		{
 			var damage_mc:MovieClip = projectile.getDamageMC();
-			damage_mc.x = projectile.skin.x - skin.x;
+			damage_mc.x = projectile.x - x;
 			damage_mc.visible = true;
-			skin.addChild(damage_mc);
+			skin.animation_mc.addChild(damage_mc);
+			// Para simular el retroceso producido por el impacto
+			TweenLite.to(this.skin.animation_mc, 0.01, { y:"-=10" } );
+			TweenLite.to(this.skin.animation_mc, 0.5, { y:"+=10", delay:0.01 } );
 		}
 		
 		
-		
-		
-		
+		override protected function onDisposal():void 
+		{
+			super.onDisposal();
+		}
 	}
 
 }

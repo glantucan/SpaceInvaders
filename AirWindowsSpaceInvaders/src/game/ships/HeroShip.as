@@ -3,9 +3,9 @@
 	import flash.display.MovieClip;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
-	import game.gamerounds.AGameRound;
 	import game.projectiles.HeroBullet;
-	import game.AUpdater;
+	import game.projectiles.ProjectileList;
+	import game.UpdatableList;
 	
 	
 	public class HeroShip extends AShip 
@@ -21,11 +21,12 @@
 		private var aMax:Number;
 		private var bulletCounter:int;
 		
-		public function HeroShip(container:MovieClip, gameRound:AGameRound) 
+		public function HeroShip(	container:MovieClip,  shipId:String, updatables:UpdatableList, 
+									friendProjectiles:ProjectileList, enemyProjectiles:ProjectileList) 
 		{
-			skin = container.addChild( new HeroSkin() ) as MovieClip;
-			
-			super(container, gameRound);
+			super(container, shipId, updatables, friendProjectiles, enemyProjectiles);
+			skin = new HeroSkin();
+			container.addChild(skin);
 			
 			a = 0;
 			v = 0;
@@ -68,7 +69,10 @@
 					break;
 					
 				case Keyboard.SPACE:
-					spacePressed = true;
+					if (!pressedKeys[e.keyCode])
+					{
+						spacePressed = true;
+					}
 					break;
 				
 				default:
@@ -106,49 +110,50 @@
 		}
 		
 		// Debería ser heredada de Ship.
-		override public function update():void 
+		override protected function beforeCollision():void 
 		{
-			if (skin.x > container.stage.stageWidth - skin.width / 2 ||
+			// Primero actualizamos la posición
+			if (moveLeft )
+			{
+				a = -aMax;
+			}
+			else if (moveRight)
+			{
+				a = aMax;			
+			}
+			else
+			{
+				a = 0;
+				v = 0;
+			}
+			
+			// Acelerar hasta la velocidad máxima. Si acabamos de cambiar de dirección Primero frenamos
+			// Si nos movemos de dirección (a*v < 0) hay que frenar (aplicando la acelaracion aunque 
+			// el valor absoluto de la velocidad haya llegado al máximo).
+			if (Math.abs(v) < vMax || a*v < 0)
+			{
+				v += a;
+				skin.x += v;
+			} 
+			else
+			{
+				skin.x += v;
+			}
+			
+			// Si nos pasamos de los límites parar la nave en el límite.
+			if (skin.x > reference.stage.stageWidth - skin.width / 2 ||
 				skin.x < skin.width / 2 )
 			{
-				if (skin.x > container.stage.stageWidth - skin.width / 2)
+				if (skin.x > reference.width - skin.width / 2)
 				{
-					skin.x = container.stage.stageWidth - skin.width / 2 ;
+					skin.x = reference.width - skin.width / 2 ;
 				}
-				else if (skin.x < container.stage.stageWidth - skin.width / 2)
+				else if (skin.x < reference.width - skin.width / 2)
 				{
 					skin.x = skin.width / 2 + 1;
 				}
 				a = 0;
 				v = 0;
-			}
-			else
-			{
-				if (moveLeft )
-				{
-					a = -aMax;
-					//trace("left", a, v);
-				}
-				else if (moveRight)
-				{
-					a = aMax;
-					//trace("right", a, v);					
-				}
-				else
-				{
-					a = 0;
-					v = 0;
-				}
-				// Tricky way to tell if a and v have different sign (a*v < 0)
-				if (Math.abs(v) < vMax || a*v < 0)
-				{
-					v += a;
-					skin.x += v;
-				} 
-				else
-				{
-					skin.x += v;
-				}
 			}
 			
 			if (spacePressed)
@@ -158,18 +163,20 @@
 			}
 		}
 		
+		
 		private function createBullet():void 
 		{
-			var bullet:HeroBullet = new HeroBullet(container, gameRound, "bullet_" + bulletCounter.toString());
+			var bullet:HeroBullet = new HeroBullet(	container, "bullet_" + bulletCounter.toString(), 
+													updatableList, fProjectiles);
 			bullet.place(skin.x, skin.y - skin.height / 2);
-			gameRound.addHeroProjectile(bullet);
+			fProjectiles.add(bullet);
 			bulletCounter++;
-			trace("shoting " + bullet.id);
 		}
 		
-		override public function dispose():void
+		
+		override protected function onDisposal():void
 		{
-			super.dispose();
+			super.onDisposal();
 		}
 	}
 	

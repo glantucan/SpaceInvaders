@@ -1,19 +1,19 @@
-﻿package game.ships {
-	
+﻿package game.ships 
+{
 	import flash.display.MovieClip;
-	import flash.events.Event;
-	import game.AUpdater;
-	import game.gamerounds.AGameRound;
+	import game.projectiles.ProjectileList;
+	import game.UpdatableList;
 	
 	public class EnemyVanguard extends EnemyShip 
 	{
 		
-		
-		public function EnemyVanguard(theContainer:MovieClip, gamerRound:AGameRound) 
+		public function EnemyVanguard(	theContainer:MovieClip, shipId:String, updatables:UpdatableList, 
+										friendProjectiles:ProjectileList, enemyProjectiles:ProjectileList) 
 		{
-			skin = theContainer.addChild( new VanguardSkin() ) as MovieClip;
-			super(theContainer, gameRound);
-			life = 2;
+			super(theContainer, shipId, updatables, friendProjectiles, enemyProjectiles);
+			skin =  new VanguardSkin()
+			theContainer.addChild(skin);
+			life = 3;
 		}
 		
 		

@@ -1,14 +1,11 @@
 package game.gamerounds 
 {
-	import com.greensock.data.TweenLiteVars;
 	import com.greensock.TimelineLite;
 	import flash.display.MovieClip;
 	import flash.events.Event;
-	import game.AUpdater;
-	import game.GameUpdater;
-	import game.projectiles.AProjectile;
-	import game.ships.AShip;
-	import game.AUpdater;
+	import game.projectiles.ProjectileList;
+	import game.ships.HeroShip;
+	import game.UpdatableList;
 	/**
 	 * ...
 	 * @author Glantucan
@@ -28,36 +25,38 @@ package game.gamerounds
 		
 		private var frameCount:int;
 		
-		protected var updater:GameUpdater;
-		protected var collisionChecker:AUpdater;
-		
-		
+		protected var updatableObjects:UpdatableList;
+		protected var heroProjectiles:ProjectileList;
+		protected var alienProjectiles:ProjectileList;
+		protected var hero:HeroShip;
 		
 		/**
 		 * battleField must have a reference_mc movieclip wich covers the total width and height of the battleField.
 		 * @param	battleField must have a MovieClip with an instance name of "reference_mc"  wich covers the total 
 		 * 			width and height of the battleField.
-		 * @param	updater
 		 */
-		public function AGameRound(battleField:MovieClip, updater:GameUpdater, collisionChecker:AUpdater) 
+		public function AGameRound(battleField:MovieClip) 
 		{
 			this.battleField = battleField;
-			this.updater = updater;
-			this.collisionChecker = collisionChecker;
 			
+
 			battleWidth = battleField.reference_mc.width;
 			formationWidth = 0.6 * battleWidth;
 			formationMargin =  0.05 * battleWidth;
 			
 			timeline = new TimelineLite();
+			
+			// Creamos las listas de proyectiles y de objetos a actualizar en cada fotograma
+			updatableObjects = new UpdatableList();
+			heroProjectiles = new ProjectileList();
+			alienProjectiles = new ProjectileList();
 		}
 		
 		
-		/**
-		 * Template
-		 */
+		
 		public function buildRound():void
 		{
+			createBackground();
 			createAndConfigureShips();
 		}
 		 
@@ -73,41 +72,17 @@ package game.gamerounds
 		}
 		
 		
-		public function addEnemyProjectile(projectile:AProjectile):void
-		{
-			updater.addEnemyProjectile(projectile);
-			collisionChecker.addEnemyProjectile(projectile);
-		}
-		
-		public function removeEnemyProjectile(projectile:AProjectile):void
-		{
-			updater.removeEnemyProjectile(projectile)
-			collisionChecker.removeEnemyProjectile(projectile)
-		}
-		
-		public function addHeroProjectile(projectile:AProjectile):void
-		{
-			updater.addHeroProjectile(projectile);
-			collisionChecker.addHeroProjectile(projectile);
-		}
-		
-		public function removeHeroProjectile(projectile:AProjectile, collision:Boolean = false):void
-		{
-			updater.removeHeroProjectile(projectile);
-			if(collision) collisionChecker.removeHeroProjectile(projectile);
-		}
+		protected function createBackground():void { }
 		
 		protected function createAndConfigureShips():void { }
 		
-		protected function enCadaFrame(e:Event):void 
+		
+		
+		private function enCadaFrame(e:Event):void 
 		{
+			updatableObjects.update(frameCount);
 			
-			updater.update(frameCount);
-			updater.disposeAllDestroyed();
-			collisionChecker.disposeAllDestroyed();
-			
-			collisionChecker.update(frameCount);
-			if (updater.checkRoundEnd())
+			if (updatableObjects.length == 1 || hero.destroyed)
 			{
 				endRound();
 			}
