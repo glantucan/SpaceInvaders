@@ -17,10 +17,16 @@ package game
 			disposables = new Array();
 		}
 		
+		/**
+		 * Propiedad de solo lectura, da el número de updatables en la lista.
+		 * Es un getter declarado como un método pero funciona como una propiedad pública que sólo
+		 * se puede leer, no modificar.
+		 */
 		public function get length():int
 		{
 			return updatables.length;
 		}
+		
 		/**
 		 * Añade un objeto a la lista
 		 * @param	projectile
@@ -34,9 +40,9 @@ package game
 		/**
 		 * Este método no elimina directamente el objeto de la lista, lo marca para su eliminación
 		 * en la fase de limpieza (método clean())
-		 * Si se eliminara directamente mientras se setá recoriendo la lista con un bucle, 
+		 * Si se eliminara directamente mientras se está recorriendo la lista con un bucle, 
 		 * tendríamos serios problemas, por que los índices del array ya no corresponderían 
-		 * al objeto que esperamos
+		 * al objeto que esperamos.
 		 * @param	projectile
 		 */
 		public function remove(updatable:ACollider):void
@@ -68,7 +74,7 @@ package game
 		
 		
 		/**
-		 * Elimina definitivamente los projectiles que han sido destruidos de la lista.
+		 * Elimina definitivamente los projectiles que han sido marcados para eliminación de la lista.
 		 */
 		private function clean():void
 		{

@@ -1,4 +1,5 @@
-package game.projectiles {
+package game.projectiles 
+{
 	import adobe.utils.CustomActions;
 	import flash.geom.Rectangle;
 	import game.ships.AShip;
