@@ -3,7 +3,7 @@ package game.ships
 	import com.greensock.TweenLite;
 	import flash.display.MovieClip;
 	import game.projectiles.AProjectile;
-	import game.projectiles.ProjectileList;
+	import game.ProjectileList;
 	import game.UpdatableList;
 	/**
 	 * ...

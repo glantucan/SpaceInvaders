@@ -3,7 +3,7 @@ package game.gamerounds
 	import com.greensock.TimelineLite;
 	import flash.display.MovieClip;
 	import flash.events.Event;
-	import game.projectiles.ProjectileList;
+	import game.ProjectileList;
 	import game.ships.HeroShip;
 	import game.UpdatableList;
 	/**

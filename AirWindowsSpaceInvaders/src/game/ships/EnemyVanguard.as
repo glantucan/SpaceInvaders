@@ -1,7 +1,7 @@
 ﻿package game.ships 
 {
 	import flash.display.MovieClip;
-	import game.projectiles.ProjectileList;
+	import game.ProjectileList;
 	import game.UpdatableList;
 	
 	public class EnemyVanguard extends EnemyShip 

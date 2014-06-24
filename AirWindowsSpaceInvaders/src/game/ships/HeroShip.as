@@ -4,7 +4,7 @@
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	import game.projectiles.HeroBullet;
-	import game.projectiles.ProjectileList;
+	import game.ProjectileList;
 	import game.UpdatableList;
 	
 	
@@ -166,7 +166,7 @@
 		
 		private function createBullet():void 
 		{
-			var bullet:HeroBullet = new HeroBullet(	container, "bullet_" + bulletCounter.toString(), 
+			var bullet:HeroBullet = new HeroBullet(	battleField, "bullet_" + bulletCounter.toString(), 
 													updatableList, fProjectiles);
 			bullet.place(skin.x, skin.y - skin.height / 2);
 			fProjectiles.add(bullet);

@@ -7,7 +7,7 @@ package game.ships {
 	import game.colliders.ACollider;
 	import game.gamerounds.AGameRound;
 	import game.projectiles.AProjectile;
-	import game.projectiles.ProjectileList;
+	import game.ProjectileList;
 	import game.shields.AShield;
 	import game.UpdatableList;
 	/**

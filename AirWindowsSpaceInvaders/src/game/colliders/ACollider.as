@@ -5,7 +5,7 @@ package game.colliders
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 	import game.projectiles.AProjectile;
-	import game.projectiles.ProjectileList;
+	import game.ProjectileList;
 	import game.UpdatableList;
 	
 	/**
