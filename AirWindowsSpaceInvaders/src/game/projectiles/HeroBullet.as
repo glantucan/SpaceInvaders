@@ -22,7 +22,7 @@ package game.projectiles
 			damage_mc = skin.animation_mc.damage_mc;
 			skin.animation_mc.removeChild(damage_mc);
 			
-			_collider = skin.getBounds(battleField.stage);
+			_collider = skin.getBounds(reference);
 			aY = -1;
 			vMax = 10;
 			damage = 2;

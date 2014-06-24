@@ -231,7 +231,7 @@ package game.colliders
 		private function onAddedToBattleField(e:Event):void 
 		{
 			battleField.removeEventListener(Event.ADDED, onAddedToBattleField);
-			_collider = skin.getBounds(battleField.reference_mc);
+			_collider = skin.getBounds(reference);
 		}
 		
 	}

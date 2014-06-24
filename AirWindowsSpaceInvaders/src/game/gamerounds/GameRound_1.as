@@ -20,8 +20,8 @@ package game.gamerounds
 			
 			enemyCols = 8;
 			enemyRows = 4;
-			totalVDrift = 50;
-			vDriftsCount = 10;
+			verticalStepDistance = 50;
+			verticalStepNumber = 10;
 		}
 		
 		
@@ -55,7 +55,7 @@ package game.gamerounds
 			
 			var totalHDrift:Number = battleWidth - formationWidth - formationMargin * 2;
 			
-			for (var j:int = 0; j < vDriftsCount; j++) 
+			for (var j:int = 0; j < verticalStepNumber; j++) 
 			{
 				if (j % 2 == 0)
 				{
@@ -65,7 +65,7 @@ package game.gamerounds
 				{
 					timeline.add(TweenLite.to ( enemySkins, 3, { x:"-=" + totalHDrift.toString() } ) );
 				}
-				timeline.add(TweenLite.to ( enemySkins, 1, { y:"+=" + totalVDrift.toString() } ) );
+				timeline.add(TweenLite.to ( enemySkins, 1, { y:"+=" + verticalStepDistance.toString() } ) );
 				
 			}
 		}
