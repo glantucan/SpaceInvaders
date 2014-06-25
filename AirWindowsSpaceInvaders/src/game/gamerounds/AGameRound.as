@@ -56,7 +56,7 @@ package game.gamerounds
 		/**
 		 * Número de desplazamientos verticales de la animación de las naves enemigas
 		 */
-		protected var verticalStepNumber:int;
+		protected var animationSteps:int;
 		
 		/**
 		 * Contador de fotogramas (por si se necesita)
