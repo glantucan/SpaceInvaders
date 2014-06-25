@@ -10,24 +10,48 @@ package game.ships {
 	import game.ProjectileList;
 	import game.shields.AShield;
 	import game.UpdatableList;
+	import game.weapons.AWeaponArray;
 	/**
 	 * ...
 	 * @author Glantucan
 	 */
 	public class AShip extends ACollider
 	{
-		// Lista de proyectiles que me hace pupa
+		/**
+		 * Lista de proyectiles que me hace pupa
+		 */
 		protected var eProjectiles:ProjectileList;
 		
+		/**
+		 * Escudo si lo tiene
+		 */
 		protected var shield:AShield;
-		protected var weaponsArray:Array;
 		
+		/**
+		 * Si nave tiene varias armas las manejaremos en una clase que extienda a AWeaponsArray
+		 * (esta parte está incompleta) y no se está usando
+		 */
+		protected var weaponsArray:AWeaponArray;
+		
+		/**
+		 * Vida que le queda a la nave.
+		 */
 		protected var life:int;
 		
-		public var disposed:Boolean;
-		//protected var weapons:WeaponsArray;
 		
 		
+		/**
+		 * Constructor. Cada nave necesita conocer la lista de updatables para poder añadirse a si misma 
+		 * (lo hace el constructor deA ACollider) y también para añadirle proyectiles cuando dispara.
+		 * También necesita conocer la lista de proyectiles de las naves amigas (para añadirle proyectiles 
+		 * cuando dispara) y la lista de proyectiles de las naves enemigas para comprobar si alguno de sus 
+		 * proyectiles choca con ella (ver onUpdate())
+		 * @param	theContainer
+		 * @param	shipId
+		 * @param	updatables
+		 * @param	friendProjectiles
+		 * @param	enemyProjectiles
+		 */
 		public function AShip( 	theContainer:MovieClip, shipId:String, updatables:UpdatableList,
 								friendProjectiles:ProjectileList, enemyProjectiles:ProjectileList) 
 		{
@@ -37,7 +61,9 @@ package game.ships {
 		}
 		
 		
-		//Abstract update function
+		/**
+		 * Operaciones específicas de las naves que se realizan en cada actualización 
+		 */
 		override protected final function onUpdate():void  
 		{
 			beforeCollision();
@@ -86,7 +112,6 @@ package game.ships {
 		
 		override protected function onDisposal():void
 		{
-			disposed = true;
 			if (shield) shield.destroy();
 			shield = null;
 			if (weaponsArray)
