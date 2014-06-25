@@ -6,7 +6,7 @@
 	import game.gamerounds.GameRound_1;
 	
 	/**
-	 * ...
+	 * Space Invaders main Class
 	 * @author Glantucan
 	 */
 	public class Main extends Sprite 
