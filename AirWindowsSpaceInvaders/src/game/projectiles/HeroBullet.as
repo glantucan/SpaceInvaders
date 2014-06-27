@@ -4,7 +4,7 @@ package game.projectiles
 	import game.ProjectileList;
 	import game.UpdatableList;
 	/**
-	 * ...
+	 * Proyectiles disparados por la neve heroe
 	 * @author Glantucan
 	 */
 	public class HeroBullet extends AProjectile
