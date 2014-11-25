@@ -1,7 +1,7 @@
 SpaceInvaders
 =============
 
-Yet Another clone... my way ;)
+Yet Another clone... my way ;) 
 
 
 Instrucciones
